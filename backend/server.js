@@ -27,9 +27,21 @@ const io = socketIO(server, {
   }
 });
 
+const corsOptions = {
+  origin: [
+    'https://event-planner-delta-one.vercel.app',
+    'http://localhost:5173',  // for local dev
+    'http://localhost:3000',
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+
 // --- MIDDLEWARE ---
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Serve the 'uploads' folder as static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
