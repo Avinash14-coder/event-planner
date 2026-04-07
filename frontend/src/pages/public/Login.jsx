@@ -26,7 +26,7 @@ const Login = ({ onLogin }) => {
     // FIX 1: Dynamic URL checks if you are running locally or on Vercel
     const baseUrl = window.location.hostname === "localhost" 
       ? "http://localhost:5000" 
-      : "https://event-planner-86ju.onrender.com";
+      : "https://event-planner-1kse.onrender.com";
     
     try {
       const response = await fetch(`${baseUrl}${endpoint}`, {

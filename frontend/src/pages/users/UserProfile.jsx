@@ -37,7 +37,7 @@ const UserProfile = ({ user }) => {
 
   const baseUrl = window.location.hostname === "localhost" 
     ? "http://localhost:5000" 
-    : "https://event-planner-86ju.onrender.com";
+    : "https://event-planner-1kse.onrender.com";
 
   // --- FETCH BOOKINGS ---
   useEffect(() => {

@@ -35,7 +35,7 @@ const VendorDashboard = () => {
   // DYNAMIC URL SETUP (Ensures it talks to your local backend when testing)
   const baseUrl = window.location.hostname === "localhost" 
     ? "http://localhost:5000" 
-    : "https://event-planner-86ju.onrender.com";
+    : "https://event-planner-1kse.onrender.com";
 
   // Sync state when user changes (e.g. after save)
   useEffect(() => {

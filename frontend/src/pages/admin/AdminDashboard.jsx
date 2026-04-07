@@ -10,7 +10,7 @@ const AdminDashboard = () => {
   // Dynamic URL setup
   const baseUrl = window.location.hostname === "localhost" 
     ? "http://localhost:5000" 
-    : "https://event-planner-86ju.onrender.com";
+    : "https://event-planner-1kse.onrender.com";
 
   // Fetch All Data
   const fetchData = async () => {
