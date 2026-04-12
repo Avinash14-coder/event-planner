@@ -4,9 +4,29 @@ import { Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { GoogleLogin } from '@react-oauth/google';
 import eventraLogo from '../../assets/eventra_logo.png';
+import { useTheme } from '../../context/ThemeContext';
+
+const animationStyles = `
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+`;
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('user');
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -103,11 +123,18 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    // THEME UPDATE: Unified Brand Gradient Background
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#f7edf2] via-white to-[#faf5f8] dark:bg-gradient-to-br dark:from-[#05070a] dark:via-[#0a0d14] dark:to-[#111622] transition-colors duration-500">
-      
-      {/* GLASSMORPHISM CARD */}
-      <div className="dark:bg-[#0a0d14]/95 bg-white/90 backdrop-blur-xl shadow-2xl rounded-3xl w-full max-w-lg overflow-hidden border dark:border-white/10 border-white/50 relative">
+    <>
+      <style>{animationStyles}</style>
+      {/* THEME UPDATE: Unified Brand Gradient Background with Floating Blobs */}
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#f7edf2] via-white to-[#faf5f8] dark:bg-gradient-to-br dark:from-[#05070a] dark:via-[#0a0d14] dark:to-[#111622] transition-colors duration-500 relative overflow-hidden">
+        
+        {/* CRAZY ANIMATED BACKGROUND SHAPES */}
+        <div className="absolute top-0 left-0 w-72 h-72 md:w-96 md:h-96 bg-[#b14e79]/30 dark:bg-[#b14e79]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-72 h-72 md:w-96 md:h-96 bg-purple-400/30 dark:bg-purple-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 md:w-96 md:h-96 bg-pink-400/30 dark:bg-pink-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+        
+        {/* GLASSMORPHISM CARD */}
+        <div className="dark:bg-[#0a0d14]/80 bg-white/80 backdrop-blur-2xl shadow-2xl rounded-3xl w-full max-w-lg overflow-hidden border dark:border-white/10 border-white/50 relative hover:-translate-y-2 transition-all duration-500 z-10">
         
         {/* THEME UPDATE: Decorative Top Shape */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#b14e79] to-[#8e3e61]"></div>
@@ -211,7 +238,7 @@ const Login = ({ onLogin }) => {
                   onError={() => {
                     setErrorMessage('Google Login Failed');
                   }}
-                  theme={window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'filled_black' : 'outline'}
+                  theme={theme === 'dark' ? 'filled_black' : 'outline'}
                   size="large"
                   text="continue_with"
                   shape="rectangular"
@@ -238,6 +265,7 @@ const Login = ({ onLogin }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
