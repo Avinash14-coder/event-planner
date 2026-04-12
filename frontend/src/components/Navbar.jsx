@@ -23,13 +23,13 @@ const Navbar = ({ user, onLogout }) => {
             <Link to="/about" className="hover:text-[#b14e79] dark:hover:text-white transition">About</Link>
             <Link to="/vendors" className="hover:text-[#b14e79] dark:hover:text-white transition">Find Vendors</Link>
 
-            {/* <button
+            <button
               onClick={toggleTheme}
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition"
               aria-label="Toggle Theme"
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            </button> */}
+            </button>
 
             {user ? (
               <div className="flex items-center gap-4">

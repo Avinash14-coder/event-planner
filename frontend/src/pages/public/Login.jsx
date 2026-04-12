@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { GoogleLogin } from '@react-oauth/google';
 import eventraLogo from '../../assets/eventra_logo.png';
 
 const Login = ({ onLogin }) => {
@@ -16,10 +17,51 @@ const Login = ({ onLogin }) => {
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleGoogleAuth = async (credentialResponse) => {
     setLoading(true);
     setErrorMessage("");
+    const baseUrl = window.location.hostname === "localhost" 
+      ? "http://localhost:5000" 
+      : "https://event-planner-1kse.onrender.com";
+
+    try {
+      const response = await fetch(`${baseUrl}/api/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: credentialResponse.credential, role: activeTab }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(`Welcome via Google, ${data.user.name}!`);
+        onLogin(data.user);
+        if (data.user.role === 'vendor') navigate('/vendor/dashboard');
+        else if (data.user.role === 'admin') navigate('/admin/dashboard');
+        else navigate('/vendors');
+      } else {
+        setErrorMessage(data.error || "Google Authentication failed.");
+      }
+    } catch (error) {
+      setErrorMessage("Server not reachable. Is your local backend running?");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    if (!isLoginMode) {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!passwordRegex.test(formData.password)) {
+        setErrorMessage("Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character.");
+        return;
+      }
+    }
+
+    setLoading(true);
 
     const endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/signup';
     
@@ -150,6 +192,34 @@ const Login = ({ onLogin }) => {
               {!loading && <ArrowRight size={20} />}
             </button>
           </form>
+
+          {/* Google Login for Existing Users */}
+          {isLoginMode && (
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t dark:border-white/10 border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 dark:bg-[#0a0d14]/95 bg-white/90 text-gray-500">Or continue with</span>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleAuth}
+                  onError={() => {
+                    setErrorMessage('Google Login Failed');
+                  }}
+                  theme={window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'filled_black' : 'outline'}
+                  size="large"
+                  text="continue_with"
+                  shape="rectangular"
+                  width="100%"
+                />
+              </div>
+            </div>
+          )}
 
           {/* Footer Toggle */}
           <div className="text-center mt-8">
