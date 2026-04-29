@@ -26,6 +26,7 @@ import VendorBookings from './pages/vendor/VendorBookings';
 
 // --- ADMIN PAGES ---
 import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageUsers from './pages/admin/ManageUsers';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -145,6 +146,7 @@ function App() {
             }
           >
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" element={<ManageUsers />} />
           </Route>
 
           {/* Catch-all redirect */}

@@ -39,4 +39,22 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, updateUser };
+// DELETE /api/users/:id
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    
+    // 1. Delete all services owned by this user (if they are a vendor)
+    const Vendor = require('../models/VendorModel');
+    await Vendor.deleteMany({ ownerId: userId });
+    
+    // 2. Delete the user
+    await User.findByIdAndDelete(userId);
+    
+    res.json({ message: 'User and all associated services deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { getAllUsers, updateUser, deleteUser };
